@@ -81,7 +81,7 @@
 	let lst_clock = 0;
 	let clock = 0;
 
-	function random_postive_negative() {
+	function random_positive_negative() {
 		if (Math.round(Math.random())) { return 1; }
 		return -1;
 	}
@@ -535,7 +535,7 @@
 		this.y = config.y;
 
 		this.xa = config.d * config.speed;
-		this.ya = random_postive_negative() * Math.random() * config.w;
+		this.ya = random_positive_negative() * Math.random() * config.w;
 
 		this.xaa = 0;
 		this.yaa = 0.001 * config.w;
