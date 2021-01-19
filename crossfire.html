@@ -2,8 +2,8 @@
 	<div id=info>
 		PlayerA Lifes: <span id="player-a-life"></span>
 		PlayerB Lifes: <span id="player-b-life"></span>
-		Speed: <span id=spd></span>FPS
 	</div>
+	<span id="fps"></span>
 	<canvas id="board" width="1500px" , height="800px"></canvas>
 </div>
 
@@ -20,7 +20,15 @@
 		this.grey = '#C7C7C7';
 	}
 
-	let color = new Color();
+	const color = new Color();
+
+	function draw_process_bar(x, y, percent, bar_color, len) {
+		let length = len || 400;
+		cvs.fillStyle = color.grey + '7F';
+		cvs.fillRect(x, y, length, 20);
+		cvs.fillStyle = bar_color + '7F';
+		cvs.fillRect(x, y, length * percent / 100, 20);
+	}
 
 	function KeyboardState() {
 		function _Listener(code, callback) {
@@ -149,7 +157,7 @@
 		};
 	}
 
-	function Player(keys, color) {
+	function Player(keys, color, dp_config) {
 		this.gun = new Rifle();
 
 		this.life = 3;
@@ -313,6 +321,12 @@
 		this.killed = () => {
 			return this.life <= 0;
 		};
+
+		this.draw_info = () => {
+			cvs.fillStyle = color.black;
+			cvs.fillText(dp_config.player_name + ':', dp_config.x, dp_config.y);
+			draw_process_bar(dp_config.x + 50, dp_config.y - 13, this.blood, color);
+		}
 	}
 
 	function Rifle() {
@@ -777,8 +791,8 @@
 		this.yl = 20;
 
 		let rland = lands.random();
-		this.x = x || rland.x + rland.len / 2;
-		this.y = y || rland.y - this.yl - 1;
+		this.x = x || rland.x + rland.len * Math.random();
+		this.y = y || rland.y - this.yl;
 
 		this.check_crash = (target) => {
 			return common_check_crash({
@@ -817,6 +831,16 @@
 		};
 	}
 
+	function to_trio_str(num) {
+		let res;
+
+		if (num < 10) { res = "&nbsp;&nbsp;" + num.toString(); }
+		else if (num < 100) { res = "&nbsp;" + num.toString(); }
+		else { res = num.toString(); }
+
+		return res;
+	}
+
 	function init() {
 		cvs = document.getElementById('board').getContext('2d');
 
@@ -826,7 +850,11 @@
 			key_right: 'ArrowRight',
 			key_up: 'ArrowUp',
 			key_down: 'ArrowDown',
-		}, color.purple);
+		}, color.purple, {
+			x: 50,
+			y: 20,
+			player_name: 'Player A'
+		});
 
 		playerB = new Player({
 			key_fire: 'KeyG',
@@ -834,11 +862,16 @@
 			key_right: 'KeyD',
 			key_up: 'KeyW',
 			key_down: 'KeyS',
-		}, color.black);
+		}, color.black, {
+			x: 550,
+			y: 20,
+			player_name: 'Player B'
+		});
 
 		requestAnimationFrame(update);
+
 		setInterval(function () {
-			document.getElementById('spd').innerHTML = clock - lst_clock;
+			document.getElementById('fps').innerHTML = to_trio_str(clock - lst_clock) + "<br>FPS";
 			lst_clock = clock;
 		}, 1000);
 	}
@@ -852,6 +885,8 @@
 
 		playerA.update();
 		playerB.update();
+		playerA.draw_info();
+		playerB.draw_info();
 
 		document.getElementById('player-a-life').innerHTML = playerA.life;
 		document.getElementById('player-b-life').innerHTML = playerB.life;
@@ -877,5 +912,13 @@
 </script>
 
 <style type="text/css">
+	#fps {
+		position: fixed;
+		right: 20px;
+		top: 20px;
 
+		font-family: 'Fira Code', 'consolas', monospace;
+		color: #86B300;
+		font-weight: 800;
+	}
 </style>
