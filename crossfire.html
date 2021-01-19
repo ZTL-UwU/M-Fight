@@ -22,16 +22,22 @@ const COLORS = {
 
 function draw_process_bar(x, y, percent, bar_color, msg) {
 	const length = 400;
-	cvs.fillStyle = COLORS.grey + '7F';
-	cvs.fillRect(x, y, length, 20);
-	cvs.fillStyle = bar_color + '7F';
+	ctx.fillStyle = COLORS.grey + '7F';
+	ctx.fillRect(x, y, length, 20);
+	ctx.fillStyle = bar_color + '7F';
 
 	const bar_length = length * percent / 100;
 	const message = msg || Math.round(percent).toString() + '%';
 
-	cvs.fillRect(x, y, bar_length, 20);
-	cvs.fillStyle = COLORS.black;
-	cvs.fillText(message, x + bar_length + 2, y + 13);
+	ctx.fillRect(x, y, bar_length, 20);
+	ctx.fillStyle = COLORS.black;
+	ctx.fillText(message, x + bar_length + 2, y + 13);
+}
+
+function to_trio_str(x) {
+	if (x < 10) { return "&nbsp;&nbsp;" + x.toString(); }
+	if (x < 100) { return "&nbsp;" + x.toString(); }
+	return x.toString();
 }
 
 function KeyboardState() {
@@ -95,7 +101,7 @@ const common_spd = .4;
 const max = Math.max;
 const min = Math.min;
 
-let cvs;
+let ctx;
 let kbd_state = new KeyboardState();
 let playerA;
 let playerB;
@@ -256,15 +262,15 @@ function Player(keys, color, dp_config) {
 			this.gun.draw(this);
 		}
 
-		if (this.gun.can_fire()) { cvs.fillStyle = color; }
-		else { cvs.fillStyle = COLORS.grey; }
+		if (this.gun.can_fire()) { ctx.fillStyle = color; }
+		else { ctx.fillStyle = COLORS.grey; }
 
-		cvs.fillRect(this.x, this.y, pw, ph);
-		cvs.fillRect(this.x + (pw - 1) * this.d, this.y, 6, 5);
+		ctx.fillRect(this.x, this.y, pw, ph);
+		ctx.fillRect(this.x + (pw - 1) * this.d, this.y, 6, 5);
 
 		const rbi = this.gun.bullet_count();
-		cvs.fillStyle = COLORS.black;
-		cvs.fillText(Math.round(this.blood).toString() + '  ' + rbi.rest.toString(), this.x, this.y - 5);
+		ctx.fillStyle = COLORS.black;
+		ctx.fillText(Math.round(this.blood).toString() + '  ' + rbi.rest.toString(), this.x, this.y - 5);
 	};
 
 	this.left = () => {
@@ -335,8 +341,8 @@ function Player(keys, color, dp_config) {
 	};
 
 	this.draw_info = () => {
-		cvs.fillStyle = COLORS.black;
-		cvs.fillText(dp_config.player_name + ':', dp_config.x, dp_config.y);
+		ctx.fillStyle = COLORS.black;
+		ctx.fillText(dp_config.player_name + ':', dp_config.x, dp_config.y);
 		draw_process_bar(dp_config.x + 50, dp_config.y - 13, this.blood, color);
 
 		const rbi = this.gun.bullet_count();
@@ -406,17 +412,17 @@ function SniperRifle() {
 			y: y,
 			d: d,
 			w: 0,
-			damage: 30,
+			damage: 15,
 			len: 30,
 			hit: 25,
-			speed: 40,
+			speed: 75,
 		});
 	};
 
 	this.draw = (player) => {
 		if (!this.can_fire()) { return; }
-		cvs.fillStyle = COLORS.grey;
-		cvs.fillRect(player.x, player.y, player.d * board_width, 1);
+		ctx.fillStyle = COLORS.grey;
+		ctx.fillRect(player.x, player.y, player.d * board_width, 1);
 	};
 
 	this.bullet_count = () => {
@@ -546,6 +552,37 @@ function MachineGun() {
 	};
 }
 
+function ThrowKnife() {
+	this.rest_bullet = 5;
+
+	this.can_multi_fire = () => false;
+
+	this.fire = (x, y, d) => {
+		if (!this.can_fire()) { return; }
+		this.rest_bullet -= 1;
+		return new Knife({
+			x: x,
+			y: y,
+			d: d,
+		});
+	};
+
+	this.can_fire = () => {
+		return this.rest_bullet > 0;
+	};
+
+	this.update = () => {
+		return !this.can_fire();
+	};
+
+	this.bullet_count = () => {
+		return {
+			rest: this.rest_bullet,
+			full: 5,
+		};
+	};
+}
+
 function PowerDefence() {
 	this.rest_bullet = 15;
 
@@ -571,8 +608,8 @@ function PowerDefence() {
 
 	this.draw = (player) => {
 		if (!this.can_fire()) { return; }
-		cvs.fillStyle = COLORS.red;
-		cvs.fillRect(player.x, player.y, player.d * 50, 1);
+		ctx.fillStyle = COLORS.red;
+		ctx.fillRect(player.x, player.y, player.d * 50, 1);
 	};
 
 	this.bullet_count = () => {
@@ -616,8 +653,8 @@ function Bullet(config) {
 	};
 
 	this.draw = () => {
-		cvs.fillStyle = COLORS.yellow;
-		cvs.fillRect(this.x, this.y - 1, this.len, 3);
+		ctx.fillStyle = COLORS.yellow;
+		ctx.fillRect(this.x, this.y - 1, this.len, 3);
 	};
 
 	this.alive = () => {
@@ -641,10 +678,66 @@ function Bullet(config) {
 	};
 }
 
+function Knife(config) {
+	complete_with_default(config, {
+		damage: 15,
+		hit: 25,
+		speed: 30,
+	});
+
+	this.damage = config.damage;
+	this.hit = config.hit;
+
+	this.d = config.d;
+	this.done = false;
+
+	this.x = config.x;
+	this.y = config.y;
+
+	this.xa = config.d * config.speed;
+	this.ya = -20 * common_spd;
+
+	this.xaa = 0;
+	this.yaa = 0.5 * common_spd;
+
+	this.update = () => {
+		this.x += this.xa;
+		this.y += this.ya;
+		this.xa += this.xaa;
+		this.ya += this.yaa;
+	};
+
+	this.draw = () => {
+		ctx.fillStyle = COLORS.red;
+		ctx.beginPath();
+		ctx.arc(this.x, this.y, 7, 0, 2 * Math.PI);
+		ctx.fill();
+	};
+
+	this.alive = () => {
+		if (this.done || this.x < 0 || this.x > board_width) { return false; }
+		return true;
+	};
+
+	this.check_crash = (x, y, xl, yl) => {
+		return common_check_crash({
+			x: this.x,
+			y: this.y,
+			xa: this.xa,
+			ya: this.ya,
+			xl: 7,
+		}, {
+			x: x,
+			y: y,
+			xl: xl,
+			yl: yl,
+		});
+	};
+}
 
 function ShortAttack(config) {
 	complete_with_default(config, {
-		damage: 35,
+		damage: 25,
 		hit: 45,
 	});
 
@@ -712,8 +805,8 @@ function Land(x, y, l) {
 	};
 
 	this.draw = () => {
-		cvs.fillStyle = COLORS.black;
-		cvs.fillRect(this.x, this.y, this.len, 2);
+		ctx.fillStyle = COLORS.black;
+		ctx.fillRect(this.x, this.y, this.len, 2);
 	};
 }
 
@@ -749,11 +842,10 @@ function YMoveLand(x, y, l, ttl) {
 
 	this.draw = () => {
 		this.update();
-		cvs.fillStyle = COLORS.black;
-		cvs.fillRect(this.x, this.y, this.len, 2);
+		ctx.fillStyle = COLORS.black;
+		ctx.fillRect(this.x, this.y, this.len, 2);
 	};
 }
-
 
 function LandScape() {
 	this.lands = new Array();
@@ -853,30 +945,20 @@ function Crate(x, y) {
 	};
 
 	this.draw = () => {
-		cvs.fillStyle = COLORS.yellow;
-		cvs.fillRect(this.x, this.y, this.xl, this.yl);
+		ctx.fillStyle = COLORS.yellow;
+		ctx.fillRect(this.x, this.y, this.xl, this.yl);
 	};
 
 	this.been_collect = () => {
 		this.done = true;
-		let tools = [SubmachineGun, SniperRifle, PowerDefence, AK47Gun, AK47Gun, AK47Gun, AK47Gun, AK47Gun];
+		let tools = [SubmachineGun, SniperRifle, PowerDefence, ThrowKnife, ThrowKnife, AK47Gun, AK47Gun, AK47Gun, AK47Gun, AK47Gun];
 		let rtool = tools[Math.round(Math.random() * (tools.length - 1))]
 		return new rtool();
 	};
 }
 
-function to_trio_str(num) {
-	let res;
-
-	if (num < 10) { res = "&nbsp;&nbsp;" + num.toString(); }
-	else if (num < 100) { res = "&nbsp;" + num.toString(); }
-	else { res = num.toString(); }
-
-	return res;
-}
-
 function init() {
-	cvs = document.getElementById('board').getContext('2d');
+	ctx = document.getElementById('board').getContext('2d');
 
 	playerA = new Player({
 		key_fire: 'KeyM',
@@ -912,7 +994,7 @@ function init() {
 
 function update() {
 	clock += 1;
-	cvs.clearRect(0, 0, board_width, board_height);
+	ctx.clearRect(0, 0, board_width, board_height);
 
 	playerA.check_hit(playerB);
 	playerB.check_hit(playerA);
@@ -929,7 +1011,7 @@ function update() {
 	if (playerB.killed()) { alert('PlayerA win!'); return; }
 	lands.draw();
 
-	if (clock % 100 == 0) {
+	if (clock % 200 == 0) {
 		crates.add(new Crate());
 	}
 
