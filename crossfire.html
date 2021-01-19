@@ -9,6 +9,19 @@
 
 <script type="text/javascript">
 
+	function Color() {
+		this.black = '#000000';
+		this.red = '#EA6C6D';
+		this.green = '#86B300';
+		this.yellow = '#ECA944';
+		this.blue = '#3199E1';
+		this.purple = '#A37ACC';
+		this.cyan = '#4CBF99';
+		this.grey = '#C7C7C7';
+	}
+
+	let color = new Color();
+
 	function KeyboardState() {
 		function _Listener(code, callback) {
 			this.check = (x) => x.code == code;
@@ -230,14 +243,14 @@
 			this.gun.draw(this);
 
 			if (this.gun.can_fire()) { cvs.fillStyle = color; }
-			else { cvs.fillStyle = '#888'; }
+			else { cvs.fillStyle = color.grey; }
 
 			cvs.fillRect(this.x, this.y, pw, ph);
 
 			cvs.fillStyle = color;
 			cvs.fillRect(this.x + pw * this.d, this.y, 5, 5);
 
-			cvs.fillStyle = 'black';
+			cvs.fillStyle = color.black;
 			cvs.fillText(Math.round(this.blood), this.x, this.y - 5);
 		};
 
@@ -332,7 +345,7 @@
 		};
 
 		this.draw = (player) => {
-			cvs.fillStyle = 'black';
+			cvs.fillStyle = color.black;
 			cvs.fillText(this.rest_bullet, player.x + 20, player.y - 5);
 		};
 	}
@@ -371,7 +384,7 @@
 
 		this.draw = (player) => {
 			if (!this.can_fire()) { return; }
-			cvs.fillStyle = '#666';
+			cvs.fillStyle = color.grey;
 			cvs.fillRect(player.x, player.y, player.d * board_width, 1);
 		};
 	}
@@ -404,7 +417,7 @@
 		};
 
 		this.draw = (player) => {
-			cvs.fillStyle = 'black';
+			cvs.fillStyle = color.black;
 			cvs.fillText(this.rest_bullet, player.x + 20, player.y - 5);
 		};
 	}
@@ -437,7 +450,7 @@
 		};
 
 		this.draw = (player) => {
-			cvs.fillStyle = 'black';
+			cvs.fillStyle = color.black;
 			cvs.fillText(this.rest_bullet, player.x + 20, player.y - 5);
 		};
 	}
@@ -481,7 +494,7 @@
 		};
 
 		this.draw = (player) => {
-			cvs.fillStyle = 'black';
+			cvs.fillStyle = color.black;
 			cvs.fillText(this.rest_bullet, player.x + 20, player.y - 5);
 		};
 	}
@@ -510,7 +523,7 @@
 		};
 
 		this.draw = (player) => {
-			cvs.fillStyle = 'red';
+			cvs.fillStyle = color.red;
 			cvs.fillText(this.rest_bullet, player.x + 20, player.y - 5);
 		};
 	}
@@ -548,7 +561,7 @@
 		};
 
 		this.draw = () => {
-			cvs.fillStyle = '#ff9200';
+			cvs.fillStyle = color.yellow;
 			cvs.fillRect(this.x, this.y - 1, this.len, 3);
 		};
 
@@ -644,7 +657,7 @@
 		};
 
 		this.draw = () => {
-			cvs.fillStyle = 'black';
+			cvs.fillStyle = color.black;
 			cvs.fillRect(this.x, this.y, this.len, 2);
 		};
 	}
@@ -681,7 +694,7 @@
 
 		this.draw = () => {
 			this.update();
-			cvs.fillStyle = 'black';
+			cvs.fillStyle = color.black;
 			cvs.fillRect(this.x, this.y, this.len, 2);
 		};
 	}
@@ -792,7 +805,7 @@
 		};
 
 		this.draw = () => {
-			cvs.fillStyle = '#e57300';
+			cvs.fillStyle = color.yellow;
 			cvs.fillRect(this.x, this.y, this.xl, this.yl);
 		};
 
@@ -813,7 +826,7 @@
 			key_right: 'ArrowRight',
 			key_up: 'ArrowUp',
 			key_down: 'ArrowDown',
-		}, '#8959A8');
+		}, color.purple);
 
 		playerB = new Player({
 			key_fire: 'KeyG',
@@ -821,13 +834,13 @@
 			key_right: 'KeyD',
 			key_up: 'KeyW',
 			key_down: 'KeyS',
-		}, 'black');
+		}, color.black);
 
 		requestAnimationFrame(update);
 		setInterval(function () {
-			document.getElementById('spd').innerHTML = (clock - lst_clock) * 4;
+			document.getElementById('spd').innerHTML = clock - lst_clock;
 			lst_clock = clock;
-		}, 250);
+		}, 1000);
 	}
 
 	function update() {
