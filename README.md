@@ -1,3 +1,3 @@
 # M-Fight
 
-An HTML5 fight game.
+A HTML5 fight game.
