@@ -179,7 +179,7 @@ function Player(keys, color, dp_config) {
 	this.d = 1;
 
 	let rland = lands.random();
-	this.x = rland.x + 50;
+	this.x = rland.x + rland.len * Math.random();
 	this.y = -500;
 
 	this.xa = 0;
@@ -205,7 +205,8 @@ function Player(keys, color, dp_config) {
 	this.update = () => {
 		if (!this.alive()) {
 			this.blood = 100;
-			this.x = rland.x + 50;
+			rland = lands.random();
+			this.x = rland.x + rland.len * Math.random();
 			this.y = -500;
 			this.gun = new AK47Gun();
 			this.life -= 1;
@@ -718,7 +719,7 @@ function Knife(config) {
 		speed: 30,
 	});
 
-	const size = 14;
+	const size = 12;
 
 	this.damage = config.damage;
 	this.hit = config.hit;
@@ -745,7 +746,7 @@ function Knife(config) {
 	this.draw = () => {
 		ctx.fillStyle = COLORS.red;
 		ctx.beginPath();
-		ctx.arc(this.x - size / 2, this.y - size / 2, 3.5, 0, 2 * Math.PI);
+		ctx.arc(this.x - size / 2, this.y - size / 2, size / 2, 0, 2 * Math.PI);
 		ctx.fill();
 	};
 
