@@ -170,6 +170,8 @@ function Player(keys, color, dp_config) {
 	this.space_jump = 0;
 	this.blood = 100;
 
+	this.in_abs_hit_ttl = 0;
+
 	this.bullets = new MultiAliveManager();
 
 	this.d = 1;
@@ -214,7 +216,7 @@ function Player(keys, color, dp_config) {
 			this.yaa = 0.5 * common_spd;
 			return;
 		}
-		this.last_fire -= 1;
+		this.in_abs_hit_ttl -= 1;
 
 		if (Math.abs(this.xa) < 1e-6) { this.xaa = 0; }
 		this.xa += this.xaa;
@@ -274,6 +276,7 @@ function Player(keys, color, dp_config) {
 
 	this.left = () => {
 		if (this.d != -1) { this.d = -1; }
+		if (this.in_abs_hit_ttl > 0) { return; }
 		this.xaa = 0.1;
 		this.xa = -5;
 		this.d = -1;
@@ -281,6 +284,7 @@ function Player(keys, color, dp_config) {
 
 	this.right = () => {
 		if (this.d != 1) { this.d = 1; }
+		if (this.in_abs_hit_ttl > 0) { return; }
 		this.xaa = -.1;
 		this.xa = 5;
 		this.d = 1;
@@ -308,6 +312,7 @@ function Player(keys, color, dp_config) {
 	this.been_hit = (bullet) => {
 		this.xaa = -bullet.d * .1;
 		this.xa += bullet.d * bullet.hit;
+		this.in_abs_hit_ttl = bullet.abs_hit;
 		this.blood -= bullet.damage;
 	};
 
@@ -348,11 +353,13 @@ function Player(keys, color, dp_config) {
 		const rbi = this.gun.bullet_count();
 		draw_process_bar(dp_config.x + 60, dp_config.y + 13, rbi.rest * 100 / rbi.full, color, rbi.rest.toString());
 
-		ctx.fillStyle = COLORS.red + 'DF';
-		for (let i = 0; i < this.life; i += 1) {
-			ctx.beginPath();
-			ctx.arc(dp_config.x + 7 + 20 * i, dp_config.y + 20, 7, 0, 2 * Math.PI);
-			ctx.fill();
+		if (this.life <= 3)	{
+			ctx.fillStyle = COLORS.red + 'DF';
+			for (let i = 0; i < this.life; i += 1) {
+				ctx.beginPath();
+				ctx.arc(dp_config.x + 7 + 20 * i, dp_config.y + 20, 7, 0, 2 * Math.PI);
+				ctx.fill();
+			}
 		}
 	}
 }
@@ -421,8 +428,9 @@ function SniperRifle() {
 			w: 0,
 			damage: 15,
 			len: 30,
-			hit: 25,
+			hit: 30,
 			speed: 75,
+			abs_hit: 60,
 		});
 	};
 
@@ -459,6 +467,7 @@ function SubmachineGun() {
 			speed: 20,
 			len: 15,
 			w: 1,
+			abs_hit: 3,
 		});
 	};
 
@@ -494,6 +503,7 @@ function AK47Gun() {
 			speed: 20,
 			len: 15,
 			w: 0.7,
+			abs_hit: 4,
 		});
 	};
 
@@ -603,7 +613,8 @@ function ExtendedThrowKnife() {
 			y: y,
 			d: d,
 			damage: 5,
-			hit: 15,
+			hit: 20,
+			abs_hit: 45,
 		});
 	};
 
@@ -667,11 +678,13 @@ function Bullet(config) {
 		w: 0.5,
 		hit: 14,
 		speed: 15,
+		abs_hit: 4,
 	});
 
 	this.len = config.len;
 	this.damage = config.damage;
 	this.hit = config.hit;
+	this.abs_hit = config.abs_hit;
 
 	this.d = config.d;
 	this.done = false;
@@ -723,12 +736,14 @@ function Knife(config) {
 		damage: 15,
 		hit: 25,
 		speed: 30,
+		abs_hit: 60,
 	});
 
 	const size = 12;
 
 	this.damage = config.damage;
 	this.hit = config.hit;
+	this.abs_hit = config.abs_hit;
 
 	this.d = config.d;
 	this.done = false;
@@ -782,10 +797,12 @@ function ShortAttack(config) {
 	complete_with_default(config, {
 		damage: 25,
 		hit: 45,
+		abs_hit: 60,
 	});
 
 	this.damage = config.damage;
 	this.hit = config.hit;
+	this.abs_hit = config.abs_hit;
 
 	this.d = config.d;
 	this.done = false;
@@ -1041,8 +1058,7 @@ function init() {
 
 function update() {
 	clock += 1;
-	ctx.fillStyle = 'rgba(255,255,255,0.7)';
-	ctx.fillRect(0, 0, board_width, board_height);
+	ctx.clearRect(0, 0, board_width, board_height);
 
 	playerA.check_hit(playerB);
 	playerB.check_hit(playerA);
