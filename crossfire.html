@@ -583,6 +583,39 @@ function ThrowKnife() {
 	};
 }
 
+function ExtendedThrowKnife() {
+	this.rest_bullet = 20;
+
+	this.can_multi_fire = () => clock % 10 == 0;
+
+	this.fire = (x, y, d) => {
+		if (!this.can_fire()) { return; }
+		this.rest_bullet -= 1;
+		return new Knife({
+			x: x,
+			y: y,
+			d: d,
+			damage: 5,
+			hit: 15,
+		});
+	};
+
+	this.can_fire = () => {
+		return this.rest_bullet > 0;
+	};
+
+	this.update = () => {
+		return !this.can_fire();
+	};
+
+	this.bullet_count = () => {
+		return {
+			rest: this.rest_bullet,
+			full: 20,
+		};
+	};
+}
+
 function PowerDefence() {
 	this.rest_bullet = 15;
 
@@ -685,6 +718,8 @@ function Knife(config) {
 		speed: 30,
 	});
 
+	const size = 14;
+
 	this.damage = config.damage;
 	this.hit = config.hit;
 
@@ -710,7 +745,7 @@ function Knife(config) {
 	this.draw = () => {
 		ctx.fillStyle = COLORS.red;
 		ctx.beginPath();
-		ctx.arc(this.x, this.y, 7, 0, 2 * Math.PI);
+		ctx.arc(this.x - size / 2, this.y - size / 2, 3.5, 0, 2 * Math.PI);
 		ctx.fill();
 	};
 
@@ -725,7 +760,8 @@ function Knife(config) {
 			y: this.y,
 			xa: this.xa,
 			ya: this.ya,
-			xl: 7,
+			xl: size,
+			yl: size,
 		}, {
 			x: x,
 			y: y,
@@ -951,7 +987,7 @@ function Crate(x, y) {
 
 	this.been_collect = () => {
 		this.done = true;
-		let tools = [SubmachineGun, SniperRifle, PowerDefence, ThrowKnife, ThrowKnife, AK47Gun, AK47Gun, AK47Gun, AK47Gun, AK47Gun];
+		let tools = [SubmachineGun, SniperRifle, PowerDefence, ThrowKnife, ThrowKnife, ExtendedThrowKnife, AK47Gun, AK47Gun, AK47Gun, AK47Gun, AK47Gun];
 		let rtool = tools[Math.round(Math.random() * (tools.length - 1))]
 		return new rtool();
 	};
