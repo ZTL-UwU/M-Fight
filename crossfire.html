@@ -925,14 +925,24 @@ function LandScape() {
 
 		a.push(new YMoveLand(600, 700, 150, 300));
 	}, function (a) {
-		a.push(new Land(50, 750, board_width - 50));
-		a.push(new Land(700, 650, 400));
-		a.push(new Land(750, 550, 350));
-		a.push(new Land(750, 450, 350));
-		a.push(new Land(670, 350, 500));
-		a.push(new Land(700, 250, 400));
-		a.push(new Land(720, 150, 350));
-		a.push(new YMoveLand(400, 650, 120, 250));
+		a.push(new Land(board_width / 4, board_height / 2, board_width / 2));
+	}, function (a) {
+		a.push(new Land(200, 250, 300));
+		a.push(new Land(700, 250, 500));
+		a.push(new Land(300, 400, 300));
+		a.push(new Land(670, 400, 130));
+		a.push(new Land(900, 400, 500));
+		a.push(new Land(470, 600, 130));
+		a.push(new Land(100, 600, 350));
+		a.push(new Land(730, 600, 600));
+	}, function (a) {
+		a.push(new Land(50, 50, 150));
+		a.push(new Land(board_width - 250, 70, 200));
+		a.push(new Land(250, 200, 200));
+		a.push(new Land(750, 200, 220));
+		a.push(new Land(400, 300, 350));
+		a.push(new Land(950, 400, 350));
+		a.push(new YMoveLand(100, 600, 150, 100));
 	}];
 
 	this.make = (c) => {
@@ -1031,7 +1041,8 @@ function init() {
 
 function update() {
 	clock += 1;
-	ctx.clearRect(0, 0, board_width, board_height);
+	ctx.fillStyle = 'rgba(255,255,255,0.7)';
+	ctx.fillRect(0, 0, board_width, board_height);
 
 	playerA.check_hit(playerB);
 	playerB.check_hit(playerA);
