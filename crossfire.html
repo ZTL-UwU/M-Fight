@@ -1,8 +1,4 @@
 <div id=main>
-	<div id=info>
-		PlayerA Lifes: <span id="player-a-life"></span>
-		PlayerB Lifes: <span id="player-b-life"></span>
-	</div>
 	<span id="fps"></span>
 	<canvas id="board" width="1500px" , height="800px"></canvas>
 </div>
@@ -351,6 +347,13 @@ function Player(keys, color, dp_config) {
 
 		const rbi = this.gun.bullet_count();
 		draw_process_bar(dp_config.x + 60, dp_config.y + 13, rbi.rest * 100 / rbi.full, color, rbi.rest.toString());
+
+		ctx.fillStyle = COLORS.red + 'DF';
+		for (let i = 0; i < this.life; i += 1) {
+			ctx.beginPath();
+			ctx.arc(dp_config.x + 7 + 20 * i, dp_config.y + 20, 7, 0, 2 * Math.PI);
+			ctx.fill();
+		}
 	}
 }
 
@@ -922,12 +925,6 @@ function LandScape() {
 
 		a.push(new YMoveLand(600, 700, 150, 300));
 	}, function (a) {
-		for (let i = 100; i <= 700; i += 50) {
-			for (let j = 100; j <= 1300; j += 60) {
-				a.push(new Land(j, i, 30))
-			}
-		}
-	}, function (a) {
 		a.push(new Land(50, 750, board_width - 50));
 		a.push(new Land(700, 650, 400));
 		a.push(new Land(750, 550, 350));
@@ -1041,9 +1038,6 @@ function update() {
 
 	playerA.update();
 	playerB.update();
-
-	document.getElementById('player-a-life').innerHTML = playerA.life;
-	document.getElementById('player-b-life').innerHTML = playerB.life;
 
 	if (playerA.killed()) { alert('PlayerB Win!'); return; }
 	if (playerB.killed()) { alert('PlayerA win!'); return; }
