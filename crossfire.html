@@ -352,7 +352,7 @@ function Player(keys, color, dp_config) {
 
 		const rbi = this.gun.bullet_count();
 		draw_process_bar(dp_config.x + 60, dp_config.y + 13, rbi.rest * 100 / rbi.full, color, rbi.rest.toString());
-
+		
 		if (this.life <= 3)	{
 			ctx.fillStyle = COLORS.red + 'DF';
 			for (let i = 0; i < this.life; i += 1) {
@@ -361,10 +361,14 @@ function Player(keys, color, dp_config) {
 				ctx.fill();
 			}
 		}
+
+		ctx.fillStyle = COLORS.blue;
+		ctx.fillText(this.gun.name, dp_config.x + 480, dp_config.y + 26);
 	}
 }
 
 function Rifle() {
+	this.name = "Rifle";
 	this.rest_bullet = 25;
 	this.fetch_bullet_time = 300;
 
@@ -402,6 +406,7 @@ function Rifle() {
 }
 
 function SniperRifle() {
+	this.name = "Sniper Rifle";
 	this.rest_bullet = 5;
 	this.next_fire = 30;
 
@@ -452,6 +457,7 @@ function SniperRifle() {
 }
 
 function SubmachineGun() {
+	this.name = " Sub Machine Gun";
 	this.rest_bullet = 120;
 
 	this.can_multi_fire = () => clock % 4 == 0;
@@ -488,6 +494,7 @@ function SubmachineGun() {
 }
 
 function AK47Gun() {
+	this.name = "AK-47";
 	this.rest_bullet = 35;
 
 	this.can_multi_fire = () => clock % 5 == 0;
@@ -524,6 +531,7 @@ function AK47Gun() {
 }
 
 function MachineGun() {
+	this.name = "Machine Gun";
 	this.rest_bullet = 100;
 	this.fetch_bullet_time = 400;
 	this.refetch_time = 1;
@@ -570,6 +578,7 @@ function MachineGun() {
 }
 
 function ThrowKnife() {
+	this.name = "Thrown Knife"
 	this.rest_bullet = 5;
 
 	this.can_multi_fire = () => false;
@@ -601,6 +610,7 @@ function ThrowKnife() {
 }
 
 function ExtendedThrowKnife() {
+	this.name = "Ex Thrown Knife"
 	this.rest_bullet = 20;
 
 	this.can_multi_fire = () => clock % 10 == 0;
@@ -635,6 +645,7 @@ function ExtendedThrowKnife() {
 }
 
 function PowerDefence() {
+	this.name = "Power Defence"
 	this.rest_bullet = 15;
 
 	this.can_multi_fire = () => false;
@@ -741,6 +752,7 @@ function Knife(config) {
 
 	const size = 12;
 
+	this.name = "Knife"
 	this.damage = config.damage;
 	this.hit = config.hit;
 	this.abs_hit = config.abs_hit;
@@ -1043,7 +1055,7 @@ function init() {
 		key_up: 'KeyW',
 		key_down: 'KeyS',
 	}, COLORS.green, {
-		x: 550,
+		x: 850,
 		y: 20,
 		player_name: 'Player B'
 	});
