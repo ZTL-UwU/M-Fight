@@ -1037,24 +1037,24 @@ function init() {
 	ctx = document.getElementById('board').getContext('2d');
 
 	playerA = new Player({
-		key_fire: 'KeyM',
-		key_left: 'ArrowLeft',
-		key_right: 'ArrowRight',
-		key_up: 'ArrowUp',
-		key_down: 'ArrowDown',
-	}, COLORS.purple, {
-		x: 50,
-		y: 20,
-		player_name: 'Player A'
-	});
-
-	playerB = new Player({
 		key_fire: 'KeyG',
 		key_left: 'KeyA',
 		key_right: 'KeyD',
 		key_up: 'KeyW',
 		key_down: 'KeyS',
 	}, COLORS.green, {
+		x: 50,
+		y: 20,
+		player_name: 'Player A'
+	});
+
+	playerB = new Player({
+		key_fire: 'KeyM',
+		key_left: 'ArrowLeft',
+		key_right: 'ArrowRight',
+		key_up: 'ArrowUp',
+		key_down: 'ArrowDown',
+	}, COLORS.purple, {
 		x: 850,
 		y: 20,
 		player_name: 'Player B'
