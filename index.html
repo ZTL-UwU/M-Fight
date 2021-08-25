@@ -1034,7 +1034,7 @@ function Crate(x, y) {
 
 	this.been_collect = () => {
 		this.done = true;
-		let tools = [SubmachineGun, SniperRifle, PowerDefence, ThrowKnife, ThrowKnife, ExtendedThrowKnife, AK47Gun, AK47Gun, AK47Gun, AK47Gun, AK47Gun];
+		let tools = [SubmachineGun, MachineGun, SniperRifle, PowerDefence, ThrowKnife, ThrowKnife, ExtendedThrowKnife, AK47Gun, AK47Gun, AK47Gun, AK47Gun, AK47Gun];
 		let rtool = tools[Math.round(Math.random() * (tools.length - 1))]
 		return new rtool();
 	};
