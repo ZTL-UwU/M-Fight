@@ -1,7 +1,7 @@
 # M-Fight
 
-![](https://img.shields.io/github/languages/code-size/zhangtianli2006/M-Fight?style=flat-square)
-![](https://img.shields.io/github/license/zhangtianli2006/M-Fight?style=flat-square)
+![](https://img.shields.io/github/languages/code-size/zhangtianli2006/M-Fight?style=flat-square&color=3199E1)
+![](https://img.shields.io/github/license/zhangtianli2006/M-Fight?style=flat-square&color=86B300)
 
 An HTML5 gun fight game.  
 [Demo (Online Game)](https://zhangtianli2006.github.io/M-Fight/)
