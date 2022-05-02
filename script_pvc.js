@@ -182,7 +182,7 @@ function ai_step(me, opponent) {
         me.jump();
     } 
 
-    if (cd_bullet <= 0 && me.gun.can_fire()) {
+    if (cd_bullet <= 0 && me.gun.can_fire() && me.y >= 100) {
         if (Math.abs(me.y - opponent.y) <= 20 && me.d == Math.sign(opponent.x - me.x)) {
             if (me.gun.can_multi_fire()) {cd_bullet = 1;}
             else {cd_bullet = 4;}
