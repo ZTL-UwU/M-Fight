@@ -156,6 +156,42 @@ function MultiAliveManager() {
     };
 }
 
+let cd_bullet = 0;
+
+function ai_step(me, opponent) {
+    if (Math.random() < 0.17 && Math.abs(me.y - opponent.y) <= 20 && me.gun.can_fire()) {
+        me.d = Math.sign(opponent.x - me.x);
+        if (me.d == 0) {
+            me.d = 1;
+        }
+    }  
+
+
+    if (me.x <= 200) {
+        me.d = 1; // 1=right -1=left
+    } else if (me.x >= 1300) {
+        me.d = -1;
+    }
+
+    if (me.d > 0) { me.right(); }
+    else { me.left(); }
+
+    if (me.y >= 600) {
+        me.jump();
+    } else if (me.space_jump == 0 && !me.gun.can_fire()) {
+        me.jump();
+    } 
+
+    if (cd_bullet <= 0 && me.gun.can_fire()) {
+        if (Math.abs(me.y - opponent.y) <= 20 && me.d == Math.sign(opponent.x - me.x)) {
+            if (me.gun.can_multi_fire()) {cd_bullet = 1;}
+            else {cd_bullet = 4;}
+            me.fire();
+        }
+    }
+    cd_bullet -= 1;
+}
+
 function Player(keys, color, dp_config) {
     this.gun = new Rifle();
 
@@ -194,6 +230,10 @@ function Player(keys, color, dp_config) {
     };
 
     this.update = () => {
+        if (dp_config.player_name == 'Computer') {
+            ai_step(this, playerA);
+        }
+
         if (!this.alive()) {
             this.blood = 100;
             rland = lands.random();
@@ -1057,7 +1097,7 @@ function init() {
     }, COLORS.purple, {
         x: 850,
         y: 20,
-        player_name: 'Player B'
+        player_name: 'Computer'
     });
 
     requestAnimationFrame(update);
