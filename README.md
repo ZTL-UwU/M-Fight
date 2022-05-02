@@ -5,6 +5,7 @@
 
 An HTML5 gun fight game.  
 [Demo (Online Game)](https://zhangtianli2006.github.io/M-Fight/)
+![M-Fight_title_screen](https://user-images.githubusercontent.com/49156174/166260285-29e849e4-1aea-4425-8193-dc3a7ee1847d.png)
 
 ## Usage
 
