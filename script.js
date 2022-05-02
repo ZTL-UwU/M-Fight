@@ -965,13 +965,13 @@ function LandScape() {
         a.push(new Land(100, 600, 350));
         a.push(new Land(730, 600, 600));
     }, function (a) {
-        a.push(new Land(50, 50, 150));
-        a.push(new Land(board_width - 250, 70, 200));
-        a.push(new Land(250, 200, 200));
-        a.push(new Land(750, 200, 220));
-        a.push(new Land(400, 300, 350));
-        a.push(new Land(950, 400, 350));
-        a.push(new YMoveLand(100, 600, 150, 100));
+        a.push(new Land(50, 110, 150));
+        a.push(new Land(board_width - 250, 130, 200));
+        a.push(new Land(250, 260, 200));
+        a.push(new Land(750, 260, 220));
+        a.push(new Land(400, 360, 350));
+        a.push(new Land(950, 460, 350));
+        a.push(new YMoveLand(100, 660, 150, 100));
     }];
 
     this.make = (c) => {
