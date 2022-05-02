@@ -1,0 +1,54 @@
+<div id=main>
+	<span id="fps"></span>
+	<canvas id="board" width="1500px" , height="800px"></canvas>
+	<button class="btn btn-1" onclick="location.replace('index.html');">
+		<p class="start">B a c k</p>
+	</button>
+	<button class="btn btn-2" onclick="location.replace('pvp.html');">
+		<p class="start">Restart</p>
+	</button>
+</div>
+
+<script src="./script_pvp.js"></script>
+
+<style type="text/css">
+	* {
+		font-family: 'Fira Code', 'consolas', monospace;
+	}
+
+	#fps {
+		position: fixed;
+		right: 20px;
+		top: 20px;
+
+		color: #86B300;
+		font-weight: 800;
+	}
+
+	.btn {
+		position: absolute;
+		font-weight: bold;
+		color: #FFFFFF;
+		border: none;
+		border-radius: 5px;
+		padding: 10px;
+	}
+
+	.btn-2 {
+    background-color: #A37ACC;
+		right: 20px;
+		bottom: 20px;
+	}
+	
+	.btn-1 {
+    background-color: #EA6C6D;
+		right: 20px;
+		bottom: 80px;
+	}
+
+	.start {
+		font-weight: bold;
+		font-size: 20px;
+		margin: 0;
+	}
+</style>

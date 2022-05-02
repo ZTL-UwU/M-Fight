@@ -1,20 +1,74 @@
-<div id=main>
-	<span id="fps"></span>
-	<canvas id="board" width="1500px" , height="800px"></canvas>
-</div>
+<html>
 
-<script src="./script.js"></script>
+<body style="margin: 0;">
+  <img src="bg.png" class="bg">
+  <h1 class="title">M-Fight</h1>
+  <div class="btn-group">
+    <button class="btn btn-1" onclick="location.replace('pvp.html');">
+      <p class="start">Start</p>Player vs Player
+    </button>
 
-<style type="text/css">
+    <button class="btn btn-2" onclick="location.replace('pvc.html');">
+      <p class="start">Start</p>Player vs Computer
+    </button>
+  </div>
+</body>
 
-#fps {
-	position: fixed;
-	right: 20px;
-	top: 20px;
+</html>
 
-	font-family: 'Fira Code', 'consolas', monospace;
-	color: #86B300;
-	font-weight: 800;
-}
+<style>
+  * {
+    font-family: 'Fira Code', 'consolas', monospace;
+    user-select: none;
+  }
 
+  .bg {
+    z-index: -1;
+    height: 100vh;
+    width: 100vw;
+    filter: blur(3px);
+  }
+
+  .title {
+    position: fixed;
+    width: 100vw;
+    top: 180px;
+    text-align: center;
+    font-size: 100px;
+    font-weight: bold;
+    color: #ECA944;
+  }
+
+  .btn-group {
+    width: 100vw;
+    top: 400px;
+    position: fixed;
+    text-align: center;
+  }
+
+  .btn {
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+  }
+
+  .btn-1 {
+    background-color: #86B300;
+  }
+
+  .btn-2 {
+    background-color: #3199E1;
+    margin-left: 30px;
+  }
+
+  .start {
+    font-weight: bold;
+    font-size: 30px;
+    margin: 0;
+  }
+
+  button:hover {
+    cursor: pointer;
+  }
 </style>
