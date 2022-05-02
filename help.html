@@ -1,0 +1,89 @@
+<html>
+
+<body style="margin: 0;">
+  <img src="bg.png" class="bg">
+  <h1 class="title">M-Fight</h1>
+  <div class="btn-group">
+    <div>
+      <p class="start">Player A:</p>
+      <p class="start1">Move:</p>
+      W<br>A S D
+      <p class="start1">Attack:</p>
+      G
+    </div>
+    <div>
+      <p class="start">Player B:</p>
+      <p class="start1">Move:</p>
+      ↑<br>← ↓ →
+      <p class="start1">Attack:</p>
+      M
+    </div>
+    <br><br><br>
+    A Game By<br>
+    szdytom & zhangtianli
+  </div>
+  <button class="btn btn-1" onclick="location.replace('index.html');">
+    <p class="start">Back</p>
+  </button>
+</body>
+
+</html>
+
+<style>
+  * {
+    font-family: 'Fira Code', 'consolas', monospace;
+    user-select: none;
+  }
+
+  .bg {
+    z-index: -1;
+    height: 100vh;
+    width: 100vw;
+    filter: blur(3px);
+  }
+
+  .btn-1 {
+    background-color: #EA6C6D;
+    right: 20px;
+    bottom: 20px;
+  }
+
+  .btn {
+    position: absolute;
+    font-weight: bold;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+  }
+
+  .title {
+    position: fixed;
+    width: 100vw;
+    top: 180px;
+    text-align: center;
+    font-size: 100px;
+    font-weight: bold;
+    color: #ECA944;
+  }
+
+  .btn-group {
+    width: 100vw;
+    top: 400px;
+    position: fixed;
+    text-align: center;
+  }
+
+  .start {
+    font-weight: bold;
+    font-size: 30px;
+    margin: 0;
+  }
+
+  .start1 {
+    font-style: italic;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 0;
+  }
+</style>
