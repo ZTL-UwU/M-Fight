@@ -1089,11 +1089,11 @@ function init() {
     });
 
     playerB = new Player({
-        key_fire: 'KeyM',
-        key_left: 'ArrowLeft',
-        key_right: 'ArrowRight',
-        key_up: 'ArrowUp',
-        key_down: 'ArrowDown',
+        // key_fire: 'KeyM',
+        // key_left: 'ArrowLeft',
+        // key_right: 'ArrowRight',
+        // key_up: 'ArrowUp',
+        // key_down: 'ArrowDown',
     }, COLORS.purple, {
         x: 850,
         y: 20,
@@ -1118,8 +1118,8 @@ function update() {
     playerA.update();
     playerB.update();
 
-    if (playerA.killed()) { alert('PlayerB Win!'); return; }
-    if (playerB.killed()) { alert('PlayerA win!'); return; }
+    if (playerA.killed()) { alert('Computer Wins!\nRefresh to start again.'); return; }
+    if (playerB.killed()) { alert('PlayerA Wins!\nRefresh to start again.'); return; }
     lands.draw();
 
     if (clock % 200 == 0) {
